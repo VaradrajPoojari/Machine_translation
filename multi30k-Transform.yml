@@ -1,0 +1,103 @@
+# multi30k.yaml
+
+# Corpus opts:
+## TODO COMPLETE CORPUS OPTIONS
+#src_subword_model: ./fr.model
+#tgt_subword_model: ./en.model
+#src_subword_vocab: ./fr.vocab
+#tgt_subword_vocab: ./en.vocab
+
+## Where the samples will be written
+save_data: drive/MyDrive/Lab3/data/run/example
+## Where the vocab(s) will be written
+# Prevent overwriting existing files in the folder
+overwrite: False
+
+# Corpus opts:
+data:
+    corpus_1:
+        path_src: ./drive/MyDrive/Lab3/data/train_fre.txt
+        path_tgt: ./drive/MyDrive/Lab3/data/train_eng.txt
+#         transforms: [sentencepiece, filtertoolong]        
+        
+    valid:
+        path_src: ./drive/MyDrive/Lab3/data/val_fre.txt
+        path_tgt: ./drive/MyDrive/Lab3/data/val_eng.txt
+ #         transforms: [sentencepiece]     
+
+
+
+# Vocabulary files that were just created
+src_vocab: drive/MyDrive/Lab3/data/run/example_transform.vocab.src
+tgt_vocab: drive/MyDrive/Lab3/data/run/example_transform.vocab.tgt
+
+# Train on a single GPU
+world_size: 1
+gpu_ranks: [0]
+
+# Where to save the checkpoints
+# Note it won't actually make it to 10,000 steps because of early stopping
+save_model: drive/MyDrive/Lab3/data/run/model
+save_checkpoint_steps: 500
+train_steps: 10000
+valid_steps: 500
+early_stopping: 2
+
+
+# Checkpoint settings
+keep_checkpoint: 5
+seed: 531
+warmup_steps: 400
+report_every: 100
+
+# Model 
+## TODO Create RNN enc/dec with MLP attention
+## Should have 3 layers in encoder and 2 layers in decoder
+## 20% dropout and 500 hidden units
+# Model (note these are actually default values, but I've explicitely written them out to show how you can edit them)
+# decoder_type: rnn
+# encoder_type: rnn 
+# enc_layers: 3
+# dec_layers: 2
+# enc_rnn_size: 500
+# dec_rnn_size: 500
+# dropout: 0.2
+# global_attention : mlp
+# # Optimizer settings
+# optim: adam
+# learning_rate: 0.001
+
+decoder_type: transformer
+encoder_type: transformer
+word_vec_size: 512
+rnn_size: 512
+layers: 6
+transformer_ff: 2048
+heads: 8
+
+accum_count: 8
+optim: adam
+adam_beta1: 0.9
+adam_beta2: 0.998
+decay_method: noam
+learning_rate: 2.0
+max_grad_norm: 0.0
+
+batch_size: 4096
+batch_type: tokens
+normalization: tokens
+dropout: 0.1
+label_smoothing: 0.1
+
+max_generator_batches: 2
+
+param_init: 0.0
+param_init_glorot: 'true'
+position_encoding: 'true'
+
+world_size: 1
+gpu_ranks:
+- 0
+
+
+
